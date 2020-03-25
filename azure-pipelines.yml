@@ -42,7 +42,7 @@ steps:
   displayName: Nuget Pack
   inputs:
     command: 'pack'
-    packagesToPack: '**/*.csproj'
+    packagesToPack: 'src/**/*.csproj'
     includesymbols: true
     includesource: true
     versioningScheme: 'byPrereleaseNumber'
