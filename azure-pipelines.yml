@@ -38,26 +38,6 @@ steps:
 #     projects: '$(TestProjects)'
 #     arguments: '--configuration $(BuildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: Nuget Pack
-  inputs:
-    command: 'pack'
-    packagesToPack: 'src/**/*.csproj'
-    includesymbols: true
-    includesource: true
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0'
-
-- task: NuGetCommand@2
-  displayName: Nuget push
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'external'
-    publishFeedCredentials: 'Nuget.org Rmdp.*'
-
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
