@@ -12,8 +12,8 @@ namespace RMDP.Client {
         private readonly ILogger? _logger;
         private bool _disposed;
 
-        public NatsConnection (ConnectionFactory factory, NatsOptions options) {
-            //_logger = logger;
+        public NatsConnection (ConnectionFactory factory, NatsOptions options,ILogger<NatsConnection> logger=null) {
+            _logger = logger;
             _options = options;
             _factory = factory;
         }
