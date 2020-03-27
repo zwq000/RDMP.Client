@@ -31,30 +31,18 @@ steps:
     projects: '$(RestoreBuildProjects)'
     arguments: '--configuration $(BuildConfiguration)'
 
-# - task: DotNetCoreCLI@2
-#   displayName: Test
-#   inputs:
-#     command: test
-#     projects: '$(TestProjects)'
-#     arguments: '--configuration $(BuildConfiguration)'
 
-- task: DotNetCoreCLI@2
+- task: GitHubRelease@1
   inputs:
-    command: 'pack'
-    packagesToPack: '**/*.csproj'
-    includesymbols: true
-    includesource: true
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0'
-
-- task: NuGetCommand@2
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'external'
-    publishFeedCredentials: 'Nuget.org Rmdp.*'
+    gitHubConnection: 'github.com_zwq000'
+    repositoryName: 'zwq000/RMDP.Client'
+    action: 'create'
+    target: '(Build.BuildId)'
+    tagSource: 'gitTag'
+    tagPattern: 'pre-release-v1.0.*'
+    title: 'pre-release'
+    isPreRelease: true
+    addChangeLog: false
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
