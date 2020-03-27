@@ -31,12 +31,11 @@ steps:
     projects: '$(RestoreBuildProjects)'
     arguments: '--configuration $(BuildConfiguration)'
 
-# - task: DotNetCoreCLI@2
-#   displayName: Test
-#   inputs:
-#     command: test
-#     projects: '$(TestProjects)'
-#     arguments: '--configuration $(BuildConfiguration)'
+- task: GitHubComment@0
+  inputs:
+    gitHubConnection: 'github conection'
+    repositoryName: 'zwq000/RMDP.Client'
+    comment: 'commit from azure'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
