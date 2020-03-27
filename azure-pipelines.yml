@@ -36,13 +36,13 @@ steps:
     gitHubConnection: 'github.com_zwq000'
     repositoryName: 'zwq000/RMDP.Client'
     action: 'create'
-    target: '$(Build.SourceVersion)'
-    tagSource: 'gitTag'
-    tagPattern: 'release-v1.*'
+    target: '$(Build.BuildId)'
+    tagSource: 'userSpecifiedTag'
+    tag: 'v1.0.0-Build$(Build.BuildId)'
+    title: 'pre-release-1.0'
     isPreRelease: true
-    changeLogCompareToRelease: 'lastFullRelease'
-    changeLogType: 'commitBased'
-    
+    addChangeLog: false
+
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
