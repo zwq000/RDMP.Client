@@ -31,12 +31,16 @@ steps:
     projects: '$(RestoreBuildProjects)'
     arguments: '--configuration $(BuildConfiguration)'
 
-- task: GitHubComment@0
+- task: GitHubRelease@1
   inputs:
     gitHubConnection: 'github conection'
     repositoryName: 'zwq000/RMDP.Client'
-    comment: 'commit from azure'
-
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'gitTag'
+    isPreRelease: true
+    changeLogCompareToRelease: 'lastFullRelease'
+    changeLogType: 'commitBased'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
