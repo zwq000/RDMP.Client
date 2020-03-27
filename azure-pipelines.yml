@@ -1,0 +1,51 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- develop
+
+pool:
+#  vmImage: 'Ubuntu-16.04'
+  vmImage: 'windows-latest'
+
+variables:
+  BuildConfiguration: 'Release'
+  RestoreBuildProjects: '**/*.csproj'
+  TestProjects: '**/*[Tt]ests/*.csproj'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    version: '3.1.x'
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: '$(RestoreBuildProjects)'
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    projects: '$(RestoreBuildProjects)'
+    arguments: '--configuration $(BuildConfiguration)'
+
+
+- task: GitHubRelease@1
+  inputs:
+    gitHubConnection: 'github.com_zwq000'
+    repositoryName: 'zwq000/RMDP.Client'
+    action: 'create'
+    target: '(Build.BuildId)'
+    tagSource: 'gitTag'
+    tagPattern: 'pre-release-v1.0.*'
+    title: 'pre-release'
+    isPreRelease: true
+    addChangeLog: false
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()
