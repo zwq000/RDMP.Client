@@ -1,20 +1,32 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+RMDP Client
+=============
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+# 概述
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+RMDP Server 客户端程序示例
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+# 内容
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+## Nats.Subscribe  Nats订阅测试
+
+Nats.Subscribe 基于 .net framework 4.5 构建,适用于 windowns 平台
+
+构建成功后,执行以下命令
+```cmd
+Nats.Subscribe -l nats://xxx.xx.xx.xx:4222 -v -s rmdp
+```
+
+通过以下命令查看命令参数
+```cmd
+nats.subscribe.exe --help
+```
+## RMDP.Client.Nats RMDP Nats 订阅样例
+
+程序完成 rmdp 主题订阅,并解析类型
+
+```bash
+dotnet restore
+dotnet build
+dotnet run -- -l nats://xxx.xx.xx.xx:4222 -s rmdp
+
+```
