@@ -31,15 +31,16 @@ steps:
     projects: '$(RestoreBuildProjects)'
     arguments: '--configuration $(BuildConfiguration)'
 
+
 - task: GitHubRelease@1
   inputs:
     gitHubConnection: 'github.com_zwq000'
     repositoryName: 'zwq000/RMDP.Client'
     action: 'create'
-    target: '$(Build.BuildId)'
-    tagSource: 'userSpecifiedTag'
-    tag: 'v1.0.0-Build$(Build.BuildId)'
-    title: 'pre-release-1.0'
+    target: '(Build.BuildId)'
+    tagSource: 'gitTag'
+    tagPattern: 'pre-release-v1.0.*'
+    title: 'pre-release'
     isPreRelease: true
     addChangeLog: false
 
