@@ -33,7 +33,7 @@ steps:
 
 - task: GitHubRelease@1
   inputs:
-    gitHubConnection: 'github conection'
+    gitHubConnection: 'github.com_zwq000'
     repositoryName: 'zwq000/RMDP.Client'
     action: 'create'
     target: '$(Build.SourceVersion)'
@@ -41,6 +41,7 @@ steps:
     isPreRelease: true
     changeLogCompareToRelease: 'lastFullRelease'
     changeLogType: 'commitBased'
+    
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
