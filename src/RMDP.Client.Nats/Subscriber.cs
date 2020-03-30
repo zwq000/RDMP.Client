@@ -29,6 +29,7 @@ namespace RMDP.Client {
             this._options = options;
             this._connection = new NatsConnection (new ConnectionFactory (), options);
         }
+        
         public bool Subscribe (string eventName, EventHandler<MsgHandlerEventArgs> handler) {
             if (!_connection.TryConnect ()) return false;
 
