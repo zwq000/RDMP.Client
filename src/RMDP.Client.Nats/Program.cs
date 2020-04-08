@@ -5,20 +5,58 @@ using CommandLine;
 using NATS.Client;
 using RMDP.Events;
 
-namespace RMDP.Client.Nats
-{
+namespace RMDP.Client.Nats {
     class Program {
         public static void Main (string[] args) {
             Parser.Default.ParseArguments<CommandOptions> (args)
                 .WithParsed<CommandOptions> (o => {
-                    new Subscriber (o.ToNatsOptions ()).Subscribe (nameof (GgdsMsgEvent), OnGgdsHandler);
+                    Console.WriteLine ("start nats Subscribe from {0} subject:{1}", o.Url, o.Subject);
+                    var subscriber = new Subscriber (o.ToNatsOptions ());
+                    subscriber.Subscribe (nameof (GgdsMsgEvent), OnRecGgdsMsg);
+                    subscriber.Subscribe (nameof (LinkStateEvent), OnLinkStateChanged);
+                    subscriber.Subscribe (nameof (VdatMsgEvent), onRecVdatMsg);
+                    subscriber.Subscribe (nameof (CobdMsgEvent), onRecCobdMsg);
+                    subscriber.Subscribe (nameof (GobdMsgEvent), onRecGobdMsg);
+                    subscriber.Subscribe (nameof (BlueMsgEvent), onRecBlueMsg);
                 });
         }
 
-        static void OnGgdsHandler (object sender, MsgHandlerEventArgs args) {
+        private static void onRecGobdMsg (object sender, MsgHandlerEventArgs args) {
             var message = Encoding.UTF8.GetString (args.Message.Data);
-            var e = (GgdsMsgEvent)JsonSerializer.Deserialize (message, typeof (GgdsMsgEvent));
-            Console.WriteLine (JsonSerializer.Serialize(e.Body));
+            var e = (GobdMsgEvent) JsonSerializer.Deserialize (message, typeof (GobdMsgEvent));
+            Console.WriteLine ("GOBD::" + JsonSerializer.Serialize (e.Body));
+        }
+
+        private static void onRecBlueMsg (object sender, MsgHandlerEventArgs args) {
+            var message = Encoding.UTF8.GetString (args.Message.Data);
+            var e = (BlueMsgEvent) JsonSerializer.Deserialize (message, typeof (BlueMsgEvent));
+            Console.WriteLine ("BLUE::" + JsonSerializer.Serialize (e.Body));
+        }
+
+        private static void onRecCobdMsg (object sender, MsgHandlerEventArgs args) {
+            var message = Encoding.UTF8.GetString (args.Message.Data);
+            var e = (CobdMsgEvent) JsonSerializer.Deserialize (message, typeof (CobdMsgEvent));
+            Console.WriteLine ("OBD::" + JsonSerializer.Serialize (e.Body));
+        }
+
+        private static void onRecVdatMsg (object sender, MsgHandlerEventArgs args) {
+            var message = Encoding.UTF8.GetString (args.Message.Data);
+            var e = (LinkStateEvent) JsonSerializer.Deserialize (message, typeof (LinkStateEvent));
+            var state = e.Connected? "连接": "断开";
+            Console.WriteLine ($"LinkState::{e.SSN} {state}");
+        }
+
+        private static void OnLinkStateChanged (object sender, MsgHandlerEventArgs args) {
+            var message = Encoding.UTF8.GetString (args.Message.Data);
+            var e = (VdatMsgEvent) JsonSerializer.Deserialize (message, typeof (VdatMsgEvent));
+            Console.WriteLine ("VDAT::" + JsonSerializer.Serialize (e.Body));
+        }
+
+        static void OnRecGgdsMsg (object sender, MsgHandlerEventArgs args) {
+            var message = Encoding.UTF8.GetString (args.Message.Data);
+            var e = (GgdsMsgEvent) JsonSerializer.Deserialize (message, typeof (GgdsMsgEvent));
+            var msg = e.Body;
+            Console.WriteLine ($"GGDS::VNB:{msg.VNB} Speed:{msg.SPD} [{msg.LGT:N4},{msg.LTT:N4}] CID:{msg.CID} ");
         }
     }
 }

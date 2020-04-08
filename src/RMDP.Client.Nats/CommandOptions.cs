@@ -1,4 +1,4 @@
-using CommandLine;
+﻿using CommandLine;
 using NATS.Client;
 
 namespace RMDP.Client.Nats
@@ -6,13 +6,13 @@ namespace RMDP.Client.Nats
     class CommandOptions {
         public CommandOptions () {
             Url = Defaults.Url;
-            Subject = "foo";
+            Subject = "rmdp";
         }
 
         [Option ('l', "url", Default = Defaults.Url, HelpText = "NATS Server Url,'nats://localhost:4222'")]
         public string Url { get; set; }
 
-        [Option ('s', "subject", Default = "foo", HelpText = "订阅主题")]
+        [Option ('s', "subject", Default = "rmdp", HelpText = "订阅主题")]
         public string Subject { get; set; }
 
         public Options CreateOptions () {
